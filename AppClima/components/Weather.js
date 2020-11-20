@@ -2,14 +2,13 @@ import React from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
 import moment from 'moment';
 import {countries} from 'country-data';
-const Clima = ({resultado}) => {
-  
-  const {name, main, sys, weather} = resultado;
+const Weather = ({result}) => {
+  const {name, main, sys, weather} = result;
   if (!name) {
     return null;
   }
 
-  console.log('Resultado:' + JSON.stringify(resultado));
+  console.log('Resultado:' + JSON.stringify(result));
 
   return (
     <React.Fragment>
@@ -42,7 +41,7 @@ const Clima = ({resultado}) => {
           <Text style={styles.textoPeq}>
             Sensación Térmica{' '}
             <Text style={styles.temperaturaPeq}>
-              {main.feels_like} &#x2103;
+              {parseInt(main.feels_like)} &#x2103;
             </Text>
           </Text>
           <Text style={styles.textoPeq}>
@@ -51,11 +50,11 @@ const Clima = ({resultado}) => {
           </Text>
           <Text style={styles.textoPeq}>
             Presión{' '}
-            <Text style={styles.temperaturaPeq}>{main.pressure}hPa</Text>
+            <Text style={styles.temperaturaPeq}>{main.pressure} hPa</Text>
           </Text>
           <Text style={styles.textoPeq}>
-            Amanece {moment.unix(sys.sunrise).format('HH:mm:ss')}
-            {' - '} Anochece {moment.unix(sys.sunset).format('HH:mm:ss')}
+           🌞Amanece: {moment.unix(sys.sunrise).format('HH:mm:ss')}
+            {' - '}🌙Anochece: {moment.unix(sys.sunset).format('HH:mm:ss')}
           </Text>
         </View>
       </View>
@@ -109,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Clima;
+export default Weather;

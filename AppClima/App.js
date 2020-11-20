@@ -8,78 +8,78 @@ import {
   ImageBackground,
 } from 'react-native';
 import Header from './components/Header';
-import Formulario from './components/Formulario';
-import Clima from './components/Clima';
+import Form from './components/Form';
+import Weather from './components/Weather';
 
 const App = () => {
-  const [busqueda, guardarBusqueda] = useState({
-    ciudad: '',
+  const [search, setSearch] = useState({
+    city: '',
   });
-  const [consultar, guardarConsultar] = useState(false);
-  const [resultado, guardarResultado] = useState({});
-  const [bgcolor, guardarBgcolor] = useState('rgba(38,50,56,0.6)');
-  const {ciudad} = busqueda;
+  const [query, setQuery] = useState(false);
+  const [result, setResult] = useState({});
+  const [bgColor, setBgColor] = useState('rgba(38,50,56,0.6)');
+  const {city} = search;
 
   useEffect(() => {
-    const consultarClima = async () => {
-      if (consultar) {
+    const queryWeather = async () => {
+      if (query) {
         const appId = 'edb3b07b4eafccb0d8183712ed2f5220';
-        //const url = `http://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}`;
-        //const url = `http://api.openweathermap.org/data/2.5/weather?q=${ciudad},ES&appid=${appId}&lang=sp&units=metric`;
-        const url = `http://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${appId}&lang=sp&units=metric`;
+        //const url = `http://api.openweathermap.org/data/2.5/weather?q=${city},${pais}&appid=${appId}`;
+        //const url = `http://api.openweathermap.org/data/2.5/weather?q=${city},ES&appid=${appId}&lang=sp&units=metric`;
+        const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${appId}&lang=sp&units=metric`;
 
         try {
-          const respuesta = await fetch(url);
-          const resultado = await respuesta.json();
+          const response = await fetch(url);
+          const jsonResult = await response.json();
 
-          guardarResultado(resultado);
-          guardarConsultar(false);
+          setResult(jsonResult);
+          setQuery(false);
 
           // Modifica los colores de fondo basado en la temperatura
-          const {main} = resultado;
-          const actual = main.temp;
-          setBackgroundColor(actual);
+          const {main} = jsonResult;
+          const currentTemp = main.temp;
+          setBackgroundColor(currentTemp);
 
         } catch (error) {
           mostrarAlerta();
         }
       }
     };
-    consultarClima();
-  }, [ciudad, consultar]);
+    queryWeather();
+  }, [city, query]);
 
   const mostrarAlerta = () => {
     Alert.alert(
       'Error',
-      'No hay resultados, intenta con otra ciudad y comprueba que esté correctamente escrito',
+      'No hay results, intenta con otra city y comprueba que esté correctamente escrito',
       [{text: 'OK '}],
     );
   };
 
-  const ocultarTeclado = () => {
+  const hideKeyboard = () => {
     Keyboard.dismiss();
   };
-  const setBackgroundColor = actual => {
+  const setBackgroundColor = current => {
     // Clima muy frío
-    if (actual < 5) {
-      guardarBgcolor('rgba(75,163,199,0.6)');
+    if (current < 5) {
+      setBgColor('rgba(75,163,199,0.6)');
     } // Clima frío
-    else if (actual >= 5 && actual < 16) {
-      guardarBgcolor('rgba(30, 136, 229,0.7)');
+    else if (current >= 5 && current < 16) {
+      setBgColor('rgba(30, 136, 229,0.7)');
     } // Clima medio
-    else if (actual >= 16 && actual < 26) {
-      //guardarBgcolor('transparent');
-      guardarBgcolor('rgba(128,203,196,0.7)');
-    } else if (actual >= 26 && actual < 35) {
-      guardarBgcolor('rgba(255,179,0,0.7)');
+    else if (current >= 16 && current < 26) {
+      //setBgColor('transparent');
+      setBgColor('rgba(128,203,196,0.7)');
+    } else if (current >= 26 && current < 35) {
+      setBgColor('rgba(255,179,0,0.7)');
     }
     // clima muy caluroso
     else {
-      guardarBgcolor('rgba( 244,81,30,0.7)');
+      setBgColor('rgba( 244,81,30,0.7)');
     }
   };
   const bgColorApp = {
-    backgroundColor: bgcolor,
+    backgroundColor: bgColor,
   };
 
   return (
@@ -87,19 +87,19 @@ const App = () => {
       <ImageBackground
         source={{
           uri:
-            'https://source.unsplash.com/random/1080x1920/?weather,cloud,summer,spring,autumn,winter,nature',
+            'https://source.unsplash.com/random/1080x1920/?weather ',
         }}
         style={styles.background}>
         <Header />
-        <TouchableWithoutFeedback onPress={() => ocultarTeclado()}>
+        <TouchableWithoutFeedback onPress={() => hideKeyboard()}>
           <View style={[styles.app, bgColorApp]}>
             <View style={styles.contenido}>
-              <Clima resultado={resultado} />
-              <Formulario
-                busqueda={busqueda}
-                guardarBusqueda={guardarBusqueda}
-                guardarConsultar={guardarConsultar}
-                ocultarTeclado={ocultarTeclado}
+              <Weather result={result} />
+              <Form
+                search={search}
+                setSearch={setSearch}
+                setQuery={setQuery}
+                hideKeyboard={hideKeyboard}
               />
             </View>
           </View>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Thin',
   },
   contenido: {
-    marginHorizontal: '4%',
+    marginHorizontal: '2.5%',
   },
   background: {
     flex: 1,

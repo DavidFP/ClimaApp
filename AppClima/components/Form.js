@@ -9,56 +9,51 @@ import {
   Alert,
 } from 'react-native';
 
-const Formulario = ({
-  busqueda,
-  guardarBusqueda,
-  guardarConsultar,
-  ocultarTeclado,
-}) => {
-  const {ciudad} = busqueda;
+const Form = ({search, setSearch, setQuery, hideKeyboard}) => {
+  const {city} = search;
 
   //Valor inicial de la animación. No se puede mezclar valores escalares
-  const [animacionboton] = useState(new Animated.Value(1));
+  const [btnAnimation] = useState(new Animated.Value(1));
 
-  const consultarClima = () => {
-    if (ciudad.trim() === '') {
-      mostrarAlerta();
+  const queryWeather = () => {
+    if (city.trim() === '') {
+      showAlert();
       return;
     }
 
     // consultar la api
-    guardarConsultar(true);
+    setQuery(true);
     //ocultar teclado
-    ocultarTeclado();
+    hideKeyboard();
   };
 
-  const mostrarAlerta = () => {
+  const showAlert = () => {
     Alert.alert(
       'Información',
-      'Debe escribir el nombre de una ciudad.',
+      'Debe escribir el nombre de una city.',
       [{text: 'OK '}],
       {cancelable: true},
     );
   };
 
-  const animacionEntrada = () => {
-    Animated.spring(animacionboton, {
+  const inAnimation = () => {
+    Animated.spring(btnAnimation, {
       toValue: 0.8,
       useNativeDriver: true,
     }).start();
   };
 
-  const animacionSalida = () => {
-    Animated.spring(animacionboton, {
+  const outAnimation = () => {
+    Animated.spring(btnAnimation, {
       toValue: 1,
       friction: 4,
       tension: 20,
       useNativeDriver: true,
     }).start();
   };
-
-  const estiloAnimacion = {
-    transform: [{scale: animacionboton}],
+  // Acciones de transformación que realiza la animación.
+  const AnimationStyle = {
+    transform: [{scale: btnAnimation}],
   };
 
   return (
@@ -66,20 +61,20 @@ const Formulario = ({
       <View style={styles.formulario}>
         <View>
           <TextInput
-            value={ciudad}
+            value={city}
             style={styles.input}
-            onChangeText={ciudad => guardarBusqueda({...busqueda, ciudad})}
+            onChangeText={city => setSearch({...search, city})}
             placeholder="Escriba el nombre de la ciudad"
             placeholderTextColor="#b1bfca"
           />
         </View>
 
         <TouchableWithoutFeedback
-          onPressIn={() => animacionEntrada()} // Cuando presiona
-          onPressOut={() => animacionSalida()} // Cuando suelta
-          onPress={() => consultarClima()} // Acción de press completa
+          onPressIn={() => inAnimation()} // Cuando presiona
+          onPressOut={() => outAnimation()} // Cuando suelta
+          onPress={() => queryWeather()} // Acción de press completa
         >
-          <Animated.View style={[styles.btnBuscar, estiloAnimacion]}>
+          <Animated.View style={[styles.btnBuscar, AnimationStyle]}>
             <Text style={styles.textoBuscar}>Buscar</Text>
           </Animated.View>
         </TouchableWithoutFeedback>
@@ -113,11 +108,11 @@ const styles = StyleSheet.create({
   textoBuscar: {
     color: '#FFF',
     //fontWeight: 'bold',
-    fontFamily: 'Montserrat-ExtraBold',
+    fontFamily: 'Montserrat-Medium',
     // textTransform: 'uppercase',
     textAlign: 'center',
     fontSize: 24,
   },
 });
 
-export default Formulario;
+export default Form;

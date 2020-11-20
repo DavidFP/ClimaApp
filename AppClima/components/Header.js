@@ -5,8 +5,7 @@ const Header = () => <Text style={styles.encabezado}>El tiempo hoy</Text>;
 
 const styles = StyleSheet.create({
   encabezado: {
-    
-    paddingTop: Platform.OS === 'ios' ? 50 : 10,
+    paddingTop: Platform.OS === 'ios' ? 50 : 5,
     fontFamily: 'Montserrat-Medium',
     backgroundColor: '#0277bd',
     paddingBottom: 10,
