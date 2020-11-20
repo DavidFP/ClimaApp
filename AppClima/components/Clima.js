@@ -3,9 +3,8 @@ import {StyleSheet, View, Text, Image} from 'react-native';
 import moment from 'moment';
 import {countries} from 'country-data';
 const Clima = ({resultado}) => {
-  // grados kelvin
-  const kelvin = 273.15;
-  const {name, main, sys} = resultado;
+  
+  const {name, main, sys, weather} = resultado;
   if (!name) {
     return null;
   }
@@ -16,18 +15,10 @@ const Clima = ({resultado}) => {
     <React.Fragment>
       <View style={styles.contenedorIcono}>
         <Text style={styles.texto}>
-          En {name}
-          <Image
-            style={styles.icono}
-            source={{
-              uri: `http://openweathermap.org/img/w/${
-                resultado.weather[0].icon
-              }.png`,
-            }}
-          />
-          {countries[sys.country].name}{' '}
+          En {name}, {countries[sys.country].name}{' '}
           {countries[sys.country].emoji}
         </Text>
+        <Text style={styles.texto}>Se prevé {weather[0].description}</Text>
         <Text style={styles.textoPeq}>{moment().format('DD/MM/YYYY')}</Text>
       </View>
 
@@ -63,14 +54,8 @@ const Clima = ({resultado}) => {
             <Text style={styles.temperaturaPeq}>{main.pressure}hPa</Text>
           </Text>
           <Text style={styles.textoPeq}>
-            Amanece{' '}
-            <Text style={styles.textoPeq}>
-              {moment.unix(sys.sunrise).format('HH:mm:ss')}
-            </Text>
-            {' - '} Anochece{' '}
-            <Text style={styles.textoPeq}>
-              {moment.unix(sys.sunset).format('HH:mm:ss')}
-            </Text>
+            Amanece {moment.unix(sys.sunrise).format('HH:mm:ss')}
+            {' - '} Anochece {moment.unix(sys.sunset).format('HH:mm:ss')}
           </Text>
         </View>
       </View>
@@ -86,10 +71,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  icono: {
-    width: 50,
-    height: 58,
-  },
   texto: {
     color: '#FFF',
     fontSize: 20,
@@ -101,10 +82,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
-    marginRight: 20,
+    marginBottom: 2,
   },
   actual: {
-    fontSize: 100,
+    fontSize: 90,
     marginRight: 0,
     //fontWeight: 'bold',
     fontFamily: 'Montserrat-ExtraBold',

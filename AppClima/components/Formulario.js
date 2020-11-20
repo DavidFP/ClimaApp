@@ -9,7 +9,12 @@ import {
   Alert,
 } from 'react-native';
 
-const Formulario = ({busqueda, guardarBusqueda, guardarConsultar}) => {
+const Formulario = ({
+  busqueda,
+  guardarBusqueda,
+  guardarConsultar,
+  ocultarTeclado,
+}) => {
   const {ciudad} = busqueda;
 
   //Valor inicial de la animación. No se puede mezclar valores escalares
@@ -23,6 +28,8 @@ const Formulario = ({busqueda, guardarBusqueda, guardarConsultar}) => {
 
     // consultar la api
     guardarConsultar(true);
+    //ocultar teclado
+    ocultarTeclado();
   };
 
   const mostrarAlerta = () => {
@@ -107,7 +114,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     //fontWeight: 'bold',
     fontFamily: 'Montserrat-ExtraBold',
-   // textTransform: 'uppercase',
+    // textTransform: 'uppercase',
     textAlign: 'center',
     fontSize: 24,
   },
